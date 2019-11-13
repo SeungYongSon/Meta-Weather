@@ -6,5 +6,5 @@ import io.reactivex.Flowable
 
 interface MetaWeatherRepository {
     fun getLocation(keyword: String): Flowable<List<LocationEntity>>
-    fun getWeather(cityId: String): Flowable<List<WeatherEntity>>
+    fun getWeather(locationId: String): Flowable<List<WeatherEntity>>
 }
