@@ -5,9 +5,7 @@ import com.meta.weather.domain.entity.WeatherEntity
 import com.meta.weather.domain.repository.MetaWeatherRepository
 import io.reactivex.Flowable
 
-class MetaWeatherServiceImpl : MetaWeatherService {
-
-    lateinit var weatherRepository: MetaWeatherRepository
+class MetaWeatherServiceImpl(private val weatherRepository: MetaWeatherRepository) : MetaWeatherService {
 
     override fun getLocation(keyword: String): Flowable<List<LocationEntity>> =
         weatherRepository.getLocation(keyword)

@@ -6,9 +6,10 @@ import com.meta.weather.domain.service.MetaWeatherService
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 
-class GetWeatherInfoUseCase(composite: CompositeDisposable) : UseCase<Pair<WeatherEntity, WeatherEntity>, String>(composite) {
-
-    private lateinit var weatherService: MetaWeatherService
+class GetWeatherInfoUseCase(
+    private val weatherService: MetaWeatherService,
+    composite: CompositeDisposable
+) : UseCase<Pair<WeatherEntity, WeatherEntity>, String>(composite) {
 
     override fun createFlowable(data: String): Flowable<Pair<WeatherEntity, WeatherEntity>> =
         weatherService.getWeather(data)
