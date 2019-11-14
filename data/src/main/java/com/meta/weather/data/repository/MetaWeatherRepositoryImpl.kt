@@ -1,8 +1,8 @@
 package com.meta.weather.data.repository
 
 import com.meta.weather.data.datasource.MetaWeatherDataSource
-import com.meta.weather.data.mapper.LocationMapper
-import com.meta.weather.data.mapper.WeatherMapper
+import com.meta.weather.data.mapper.LocationEntityMapper
+import com.meta.weather.data.mapper.WeatherEntityMapper
 import com.meta.weather.domain.entity.LocationEntity
 import com.meta.weather.domain.entity.WeatherEntity
 import com.meta.weather.domain.repository.MetaWeatherRepository
@@ -10,8 +10,8 @@ import io.reactivex.Flowable
 
 class MetaWeatherRepositoryImpl(
     private val metaWeatherDataSource: MetaWeatherDataSource,
-    private val locationMapper: LocationMapper,
-    private val weatherMapper: WeatherMapper
+    private val locationMapper: LocationEntityMapper,
+    private val weatherMapper: WeatherEntityMapper
 ) : MetaWeatherRepository {
 
     override fun getLocation(keyword: String): Flowable<List<LocationEntity>> =

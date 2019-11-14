@@ -19,30 +19,29 @@ class NetworkModule {
         private const val baseUrl = "https://www.metaweather.com/api/"
     }
 
-    @Provides
     @Singleton
+    @Provides
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
-    @Provides
     @Singleton
+    @Provides
     fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .build()
     }
 
-    @Provides
     @Singleton
+    @Provides
     fun provideGson(): Gson {
         return GsonBuilder().create()
     }
 
-    @Provides
     @Singleton
-    @Named("retrofit")
-    fun provideRetrofit(gson : Gson, okHttpClient: OkHttpClient): Retrofit {
+    @Provides
+    fun provideRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

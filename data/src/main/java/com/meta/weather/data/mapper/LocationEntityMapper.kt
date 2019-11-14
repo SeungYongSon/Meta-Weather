@@ -4,7 +4,7 @@ import com.meta.weather.data.entity.LocationData
 import com.meta.weather.domain.base.Mapper
 import com.meta.weather.domain.entity.LocationEntity
 
-class LocationMapper : Mapper<LocationData, LocationEntity> {
+class LocationEntityMapper : Mapper<LocationData, LocationEntity> {
     override fun mapFrom(from: LocationData): LocationEntity =
         LocationEntity(from.woeid, from.title)
 }
