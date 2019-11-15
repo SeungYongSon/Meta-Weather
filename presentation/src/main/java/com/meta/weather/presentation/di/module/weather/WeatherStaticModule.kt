@@ -2,7 +2,7 @@ package com.meta.weather.presentation.di.module.weather
 
 import com.meta.weather.data.datasource.MetaWeatherDataSource
 import com.meta.weather.data.datasource.MetaWeatherDataSourceImpl
-import com.meta.weather.data.mapper.LocationEntityMapper
+import com.meta.weather.data.mapper.LocationWeatherInfoEntityMapper
 import com.meta.weather.data.mapper.WeatherEntityMapper
 import com.meta.weather.data.remote.Api
 import com.meta.weather.data.repository.MetaWeatherRepositoryImpl
@@ -12,6 +12,8 @@ import com.meta.weather.domain.service.MetaWeatherServiceImpl
 import com.meta.weather.domain.usecase.GetLocationUseCase
 import com.meta.weather.domain.usecase.GetWeatherInfoUseCase
 import com.meta.weather.presentation.di.scope.FragmentScope
+import com.meta.weather.presentation.mapper.LocationWeatherInfoModelMapper
+import com.meta.weather.presentation.mapper.WeatherModelMapper
 import com.meta.weather.presentation.viewmodel.weather.WeatherViewModelFactory
 import dagger.Module
 import dagger.Provides
@@ -25,8 +27,13 @@ class WeatherStaticModule {
     @Provides
     fun provideViewModelFactory(
         getLocationUseCase: GetLocationUseCase,
-        getWeatherInfoUseCase: GetWeatherInfoUseCase
-    ): WeatherViewModelFactory = WeatherViewModelFactory(getLocationUseCase, getWeatherInfoUseCase)
+        getWeatherInfoUseCase: GetWeatherInfoUseCase,
+        locationWeatherInfoModelMapper: LocationWeatherInfoModelMapper
+    ): WeatherViewModelFactory = WeatherViewModelFactory(
+        getLocationUseCase,
+        getWeatherInfoUseCase,
+        locationWeatherInfoModelMapper
+    )
 
     @FragmentScope
     @Provides
@@ -51,10 +58,12 @@ class WeatherStaticModule {
     @Provides
     fun provideMetaWeatherRepository(
         metaWeatherDataSource: MetaWeatherDataSource,
-        locationMapper: LocationEntityMapper,
-        weatherMapper: WeatherEntityMapper
+        locationWeatherInfoEntityMapper: LocationWeatherInfoEntityMapper
     ): MetaWeatherRepository =
-        MetaWeatherRepositoryImpl(metaWeatherDataSource, locationMapper, weatherMapper)
+        MetaWeatherRepositoryImpl(
+            metaWeatherDataSource,
+            locationWeatherInfoEntityMapper
+        )
 
     @FragmentScope
     @Provides
@@ -67,9 +76,19 @@ class WeatherStaticModule {
 
     @FragmentScope
     @Provides
-    fun provideLocationEntityMapper(): LocationEntityMapper = LocationEntityMapper()
+    fun provideWeatherEntityMapper(): WeatherEntityMapper = WeatherEntityMapper()
 
     @FragmentScope
     @Provides
-    fun provideWeatherEntityMapper(): WeatherEntityMapper = WeatherEntityMapper()
+    fun provideLocationWeatherInfoEntityMapper(weatherEntityMapper: WeatherEntityMapper): LocationWeatherInfoEntityMapper =
+        LocationWeatherInfoEntityMapper(weatherEntityMapper)
+
+    @FragmentScope
+    @Provides
+    fun provideWeatherModelMapper(): WeatherModelMapper = WeatherModelMapper()
+
+    @FragmentScope
+    @Provides
+    fun provideLocationWeatherInfoModelMapper(weatherModelMapper: WeatherModelMapper): LocationWeatherInfoModelMapper =
+        LocationWeatherInfoModelMapper(weatherModelMapper)
 }

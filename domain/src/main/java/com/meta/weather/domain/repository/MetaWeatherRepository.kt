@@ -1,10 +1,9 @@
 package com.meta.weather.domain.repository
 
-import com.meta.weather.domain.entity.LocationEntity
-import com.meta.weather.domain.entity.WeatherEntity
+import com.meta.weather.domain.entity.LocationWeatherInfoEntity
 import io.reactivex.Flowable
 
 interface MetaWeatherRepository {
-    fun getLocation(keyword: String): Flowable<List<LocationEntity>>
-    fun getWeather(locationId: String): Flowable<List<WeatherEntity>>
+    fun getLocation(keyword: String): Flowable<List<String>>
+    fun getWeather(locationId: String): Flowable<LocationWeatherInfoEntity>
 }

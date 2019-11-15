@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.meta.weather.presentation">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".di.app.BaseApp"
         android:allowBackup="true"

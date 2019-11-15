@@ -1,8 +1,8 @@
 package com.meta.weather.domain.entity
 
-class WeatherEntity(
+data class WeatherEntity(
     val state: String,
     val icon: String,
-    val temp: Float,
+    val temp: Double,
     val humidity: Int
 )

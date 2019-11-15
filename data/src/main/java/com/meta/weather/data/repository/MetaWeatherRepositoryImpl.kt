@@ -1,43 +1,29 @@
 package com.meta.weather.data.repository
 
 import com.meta.weather.data.datasource.MetaWeatherDataSource
-import com.meta.weather.data.mapper.LocationEntityMapper
-import com.meta.weather.data.mapper.WeatherEntityMapper
-import com.meta.weather.domain.entity.LocationEntity
-import com.meta.weather.domain.entity.WeatherEntity
+import com.meta.weather.data.mapper.LocationWeatherInfoEntityMapper
+import com.meta.weather.domain.entity.LocationWeatherInfoEntity
 import com.meta.weather.domain.repository.MetaWeatherRepository
 import io.reactivex.Flowable
 
 class MetaWeatherRepositoryImpl(
     private val metaWeatherDataSource: MetaWeatherDataSource,
-    private val locationMapper: LocationEntityMapper,
-    private val weatherMapper: WeatherEntityMapper
+    private val locationWeatherInfoEntityMapper: LocationWeatherInfoEntityMapper
 ) : MetaWeatherRepository {
 
-    override fun getLocation(keyword: String): Flowable<List<LocationEntity>> =
+    override fun getLocation(keyword: String): Flowable<List<String>> =
         metaWeatherDataSource.getLocation(keyword)
             .map { locationDataList ->
-                val locationList = ArrayList<LocationEntity>()
+                val locationList = ArrayList<String>()
 
                 locationDataList.forEach {
-                    val locationEntity = locationMapper.mapFrom(it)
-                    locationList.add(locationEntity)
+                    locationList.add(it.woeid)
                 }
 
                 locationList
             }
 
-    override fun getWeather(locationId: String): Flowable<List<WeatherEntity>> =
+    override fun getWeather(locationId: String): Flowable<LocationWeatherInfoEntity> =
         metaWeatherDataSource.getWeather(locationId)
-            .map { weatherDTO ->
-                val weatherDataList = weatherDTO.consolidated_weather
-                val weatherEntityList = ArrayList<WeatherEntity>()
-
-                weatherDataList.forEach {
-                    val weatherEntity = weatherMapper.mapFrom(it)
-                    weatherEntityList.add(weatherEntity)
-                }
-
-                weatherEntityList
-            }
+            .map { locationWeatherInfo -> locationWeatherInfoEntityMapper.mapFrom(locationWeatherInfo) }
 }
