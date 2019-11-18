@@ -61,6 +61,7 @@ class WeatherViewModel(
     fun getLocation() {
         locationCount = 0
         locationWeatherInfoList.clear()
+        locationWeatherInfoItemsLiveData.value = locationWeatherInfoList
         getLocationUseCase.execute("se", locationSubscriber)
     }
 
