@@ -1,4 +1,4 @@
-package com.meta.weather.presentation.ui
+package com.meta.weather.presentation.ui.activity
 
 import android.os.Bundle
 import com.meta.weather.presentation.R
