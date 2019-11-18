@@ -31,6 +31,8 @@ abstract class DataBindingFragment<T: ViewDataBinding> : Fragment(), HasSupportF
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         rootView = binding.root
 
+        binding.lifecycleOwner = this
+
         return rootView
     }
 

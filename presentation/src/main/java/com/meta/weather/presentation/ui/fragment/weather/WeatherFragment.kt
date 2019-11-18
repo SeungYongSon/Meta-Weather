@@ -1,11 +1,11 @@
 package com.meta.weather.presentation.ui.fragment.weather
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.meta.weather.presentation.R
 import com.meta.weather.presentation.base.DataBindingFragment
 import com.meta.weather.presentation.databinding.FragmentWeatherBinding
@@ -28,11 +28,15 @@ class WeatherFragment : DataBindingFragment<FragmentWeatherBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.locationWeatherInfoListLiveData.observe(this, Observer {
-            it.forEach{info ->
-                Log.e("Meta Weather", "${info.locationName} first ${info.weatherInfo.first.temp} second ${info.weatherInfo.second.temp}")
-            }
-        })
+        binding.locationWeatherInfoRecycler.apply {
+            adapter = LocationWeatherInfoAdapter(viewModel)
+            addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    DividerItemDecoration.VERTICAL
+                )
+            )
+        }
 
         viewModel.toastSingleLiveEvent.observe(this, Observer {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()

@@ -16,13 +16,15 @@ class WeatherViewModel(
     private val locationWeatherInfoModelMapper: LocationWeatherInfoModelMapper
 ) : ViewModel() {
 
-    val locationWeatherInfoListLiveData = MutableLiveData<ArrayList<LocationWeatherInfoModel>>()
+    val locationWeatherInfoItemsLiveData =
+        MutableLiveData<ArrayList<LocationWeatherInfoModel>>().apply {
+            value = arrayListOf()
+        }
     val toastSingleLiveEvent = SingleLiveEvent<String>()
 
     private val locationWeatherInfoList = ArrayList<LocationWeatherInfoModel>()
 
     private var locationCount: Int = 0
-    private var isSearch = false
 
     private val locationSubscriber
         get() = object : DisposableSubscriber<List<String>>() {
@@ -30,9 +32,7 @@ class WeatherViewModel(
                 locationCount = t.size
 
                 if (locationCount > 0) {
-                    t.forEach {
-                        getWeatherInfoUseCase.execute(it, weatherInfoSubscriber)
-                    }
+                    t.forEach { getWeatherInfoUseCase.execute(it, weatherInfoSubscriber) }
                 } else {
                     locationCounting()
                 }
@@ -40,6 +40,7 @@ class WeatherViewModel(
 
             override fun onError(t: Throwable) {
                 toastSingleLiveEvent.value = "오류로 인해 지역 날씨 정보를 가져올 수 없습니다!"
+                locationWeatherInfoItemsLiveData.value = locationWeatherInfoList
             }
 
             override fun onComplete() {}
@@ -49,7 +50,6 @@ class WeatherViewModel(
         get() = object : DisposableSubscriber<LocationWeatherInfoEntity>() {
             override fun onNext(t: LocationWeatherInfoEntity) {
                 val locationWeatherInfoModel = locationWeatherInfoModelMapper.mapFrom(t)
-
                 locationWeatherInfoList.add(locationWeatherInfoModel)
             }
 
@@ -59,14 +59,9 @@ class WeatherViewModel(
         }
 
     fun getLocation() {
-        if (!isSearch) {
-            locationCount = 0
-            isSearch = true
-            locationWeatherInfoList.clear()
-            getLocationUseCase.execute("se", locationSubscriber)
-        } else {
-            toastSingleLiveEvent.value = "지역 날씨 정보 가져오는 중..."
-        }
+        locationCount = 0
+        locationWeatherInfoList.clear()
+        getLocationUseCase.execute("se", locationSubscriber)
     }
 
     private fun locationCounting() {
@@ -74,12 +69,12 @@ class WeatherViewModel(
         if (locationCount <= 0) {
             if (locationWeatherInfoList.size > 0) {
                 locationWeatherInfoList.sortBy { it.locationName }
-                locationWeatherInfoListLiveData.value = locationWeatherInfoList
+                locationWeatherInfoItemsLiveData.value = locationWeatherInfoList
                 toastSingleLiveEvent.value = "성공!"
             } else {
                 toastSingleLiveEvent.value = "지역 날씨 정보가 없습니다."
+                locationWeatherInfoItemsLiveData.value = locationWeatherInfoList
             }
-            isSearch = false
         }
     }
 

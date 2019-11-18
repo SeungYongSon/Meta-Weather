@@ -9,7 +9,7 @@ class WeatherModelMapper : Mapper<WeatherEntity, WeatherModel> {
     override fun mapFrom(from: WeatherEntity): WeatherModel =
         WeatherModel(
             state = from.state,
-            icon = "https://www.metaweather.com/static/img/weather/png/64/${from.icon}",
+            icon = "https://www.metaweather.com/static/img/weather/png/${from.icon}.png",
             temp = "${round(from.temp).toInt()}℃",
             humidity = "${from.humidity}%"
         )
